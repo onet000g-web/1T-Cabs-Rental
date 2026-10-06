@@ -29,7 +29,9 @@ jobs:
           mkdir extracted
           unzip -q "$ZIP" -d extracted
           find extracted -maxdepth 3 -type f | head -50
-
+          - name: Fix app name resource
+                      run: |
+                                    sed -i 's#<string name="app_name">.*</string>#<string name="app_name">1T Cabs Rental</string>#' extracted/1T_Cabs_Rental/app/src/main/res/values/strings.xml
       - name: Build APK
         working-directory: extracted/1T_Cabs_Rental
         run: |
