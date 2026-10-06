@@ -13,6 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -26,12 +32,30 @@ jobs:
 
       - name: Extract Android project
         run: |
-          mkdir extracted
+          mkdir -p extracted
           unzip -q "$ZIP" -d extracted
           find extracted -maxdepth 3 -type f | head -50
-          - name: Fix app name resource
-                      run: |
-                                    sed -i 's#<string name="app_name">.*</string>#<string name="app_name">1T Cabs Rental</string>#' extracted/1T_Cabs_Rental/app/src/main/res/values/strings.xml
+
+      - name: Fix app name resource
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path("extracted/1T_Cabs_Rental/app/src/main/res/values/strings.xml")
+          text = p.read_text(encoding="utf-8")
+
+          text = re.sub(
+              r'<string\s+name="app_name"[^>]*>.*?</string>',
+              '<string name="app_name">1T Cabs Rental</string>',
+              text,
+              count=1,
+              flags=re.S
+          )
+
+          p.write_text(text, encoding="utf-8")
+          PY
+
       - name: Build APK
         working-directory: extracted/1T_Cabs_Rental
         run: |
