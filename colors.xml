@@ -1,0 +1,10 @@
+<resources>
+    <color name="blue_dark">#07549A</color>
+    <color name="blue">#0C66B3</color>
+    <color name="blue_light">#EAF5FF</color>
+    <color name="green">#07864E</color>
+    <color name="green_dark">#047344</color>
+    <color name="text">#0D2856</color>
+    <color name="white">#FFFFFF</color>
+    <color name="line">#8BBFE6</color>
+</resources>
